@@ -1,9 +1,66 @@
-<html>
+<html ng-app="ToDo">
   <head>
     <title>Todo Application</title>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.14/angular.min.js"></script>
+    <style>
+        .done{text-decoration:line-through;color#ccc;}
+    </style>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.14/angular.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>-->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   </head>
-  <body>
-  </body>
+    <body>
+        <h1>Res Agenda:</h1>
+    <div ng-controller="todoController">
+        <div class="container-fluid">
+            <div class= "col-sm-6" >
+                <form name="frm" ng-submit="addTodo()">
+                    <div class="form-group">
+                        <input type="text" ng-model="titleInput" class="form-control" placeholder="Enter title" required>
+                        <input type="text" ng-model="descInput" class="form-control" placeholder="Enter description" required>
+                        <input type="date" ng-model="dateInput" class="form-control" plaheholder="yyyy-mm-dd" min="2016-02-14"  required>
+                        <button type="submit" ng-disabled="frm.$invalid" class="btn-success">+ Add Task</button>
+                    </div>
+                </form>
+                <button ng-click="clearCompleted()" class="btn-danger">Clear Completed</button>   
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="todo in todos">
+                        <h4 class="list-group-item-heading">{{todo.todoTitle}}</h4>
+                        <p class="list-group-item-text">{{todo.todoDesc}}</p>
+                        <p>Due: {{todo.todoDate}}</p>
+                        <input type="checkbox" ng-model="todo.done" />
+                        <span ng-class ="{'done':todo.done}">{{todo.todoInput}}</span>
+                    </li>    
+                </ul> 
+            </div><!--end col-sm-6-->
+            
+        </div>
+    </div><!--End controller-->  
+   
+        
+        
+        
+        
+    <script>
+    angular.module('ToDo', []).
+    controller('todoController',['$scope',function($scope){
+        $scope.todos = [
+            {todoTitle:'TODO app',todoDesc:'Build a todo app with angularJS', todoDate:'3/5/2016', done:false}
+            ];
+
+        
+        $scope.addTodo = function(){
+            $scope.todos.push({todoTitle:$scope.titleInput,todoDesc:$scope.descInput,todoDate:$scope.dateInput,done:false});
+            $scope.titleInput='';
+            $scope.descInput='';
+            $scope.dateInput=null;
+        }
+        $scope.clearCompleted = function(){
+            $scope.todos = $scope.todos.filter(function(item){
+                return !item.done
+            })   
+        }        
+    }])    
+    </script>
+    </body>
 </html>
